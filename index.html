@@ -80,6 +80,7 @@
         let h = Math.floor(remaining / 3600000);
         let m = Math.floor((remaining % 3600000) / 60000);
         let s = Math.floor((remaining % 60000) / 1000);
+        
 
         headerTimeEl.innerHTML = `${h} часов ${String(m).padStart(2, "0")} минут ${String(s).padStart(2, "0")} секунд`;
       }, 1000);
