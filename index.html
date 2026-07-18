@@ -66,7 +66,7 @@
       var subtitleElement = document.querySelector(".subtitle");
       var dateToGoElement = document.createElement("div");
 
-      dateToGoElement.innerHTML = `<p>${departureTime.toLocaleDateString()}</p>`;
+      dateToGoElement.innerHTML = `<p>${departureTime.toLocaleDateString()} в ${departureTime.toLocaleTimeString()}</p>`;
       subtitleElement.append(dateToGoElement);
 
       let diff = 0;
@@ -81,7 +81,7 @@
         let m = Math.floor((remaining % 3600000) / 60000);
         let s = Math.floor((remaining % 60000) / 1000);
 
-        headerTimeEl.innerHTML = `${h}:${String(m).padStart(2, "0")}:${String(s).padStart(2, "0")}`;
+        headerTimeEl.innerHTML = `${h} часов ${String(m).padStart(2, "0")} минут ${String(s).padStart(2, "0")} секунд`;
       }, 1000);
     </script>
   </body>
