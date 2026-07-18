@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <style>
+      html * {
+        margin: 0;
+        padding: 0;
+      }
+
+      .content {
+        background-color: yellowgreen;
+        height: 100vh;
+        padding: 10px 20px;
+      }
+
+      .header {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        width: 100%;
+      }
+
+      .title {
+        display: flex;
+        flex-direction: row;
+        gap:10px
+      }
+
+      .subtitle {
+        display: flex;
+        gap:10px;
+
+      }
+
+      .header-content {
+        font-family: Cambria, Cochin, Georgia, Times, "Times New Roman", serif;
+        font-size: 36px;
+      }
+
+      .header-time {
+        font-family: Cambria, Cochin, Georgia, Times, "Times New Roman", serif;
+        font-size: 36px;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="content">
+      <div class="header">
+        <div class="title">
+          <div class="header-content">До поездки осталось</div>
+          <div class="header-time"></div>
+        </div>
+        <div class="subtitle">
+          <div>Отправляемся</div>
+        </div>
+      </div>
+    </div>
+    <script>
+      var headerTimeEl = document.querySelector(".header-time");
+      var departureTime = new Date();
+      departureTime.setFullYear(2026, 6, 31);
+      departureTime.setHours(17, 0, 0, 0);
+      var subtitleElement = document.querySelector(".subtitle");
+      var dateToGoElement = document.createElement("div");
+
+      dateToGoElement.innerHTML = `<p>${departureTime.toLocaleDateString()}</p>`;
+      subtitleElement.append(dateToGoElement);
+
+      let diff = 0;
+
+      setInterval(() => {
+        diff = diff + 1000;
+        let remaining = departureTime - Date.now();
+
+        if (remaining < 0) remaining = 0;
+
+        let h = Math.floor(remaining / 3600000);
+        let m = Math.floor((remaining % 3600000) / 60000);
+        let s = Math.floor((remaining % 60000) / 1000);
+
+        headerTimeEl.innerHTML = `${h}:${String(m).padStart(2, "0")}:${String(s).padStart(2, "0")}`;
+      }, 1000);
+    </script>
+  </body>
+</html>
