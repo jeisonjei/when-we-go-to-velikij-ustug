@@ -11,9 +11,9 @@
       }
 
       .content {
-        background-color: yellowgreen;
+        background-image: linear-gradient(#83bdff, #ffa620);
         height: 100vh;
-        padding: 10px 20px;
+        padding: 20px 30px;
       }
 
       .header {
@@ -43,6 +43,16 @@
       .header-time {
         font-family: Cambria, Cochin, Georgia, Times, "Times New Roman", serif;
         font-size: 36px;
+
+        display: flex;
+        flex-direction: column;
+      }
+
+      @media (min-width: 420px) {
+        .header-time {
+            flex-direction: row;
+            gap:10px;
+        }
       }
     </style>
   </head>
@@ -51,7 +61,11 @@
       <div class="header">
         <div class="title">
           <div class="header-content">До поездки осталось</div>
-          <div class="header-time"></div>
+          <div class="header-time">
+            <div class="hours"></div>
+            <div class="minutes"></div>
+            <div class="seconds"></div>
+          </div>
         </div>
         <div class="subtitle">
           <div>Отправляемся</div>
@@ -60,6 +74,9 @@
     </div>
     <script>
       var headerTimeEl = document.querySelector(".header-time");
+      var remainingTimeHoursElement = document.querySelector('.header-time .hours');
+      var remainingTimeMinutesElement = document.querySelector('.header-time .minutes');
+      var remainingTimeSecondsElement = document.querySelector('.header-time .seconds');
       var departureTime = new Date();
       departureTime.setFullYear(2026, 6, 31);
       departureTime.setHours(17, 0, 0, 0);
@@ -81,8 +98,9 @@
         let m = Math.floor((remaining % 3600000) / 60000);
         let s = Math.floor((remaining % 60000) / 1000);
         
-
-        headerTimeEl.innerHTML = `${h} часов ${String(m).padStart(2, "0")} минут ${String(s).padStart(2, "0")} секунд`;
+        remainingTimeHoursElement.innerHTML = `${h} часов`;
+        remainingTimeMinutesElement.innerHTML = `${String(m).padStart(2, "0")} минут`;
+        remainingTimeSecondsElement.innerHTML = `${String(s).padStart(2, "0")} секунд`;
       }, 1000);
     </script>
   </body>
