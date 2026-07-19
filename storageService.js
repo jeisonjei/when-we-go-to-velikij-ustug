@@ -21,3 +21,12 @@ function getAllKeysFromLocalStorage(){
     }
     return keys;
 }
+
+function getTaskOrder(){
+    var order = getFromLocalStorage("task-order");
+    return order ? JSON.parse(order) : [];
+}
+
+function saveTaskOrder(order){
+    addToLocalStorage("task-order", JSON.stringify(order));
+}

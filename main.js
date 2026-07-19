@@ -17,11 +17,16 @@
       document.addEventListener('my:add', (event)=>{
         var id = event.detail.wrapperId;
         addToLocalStorage(id, JSON.stringify(event.detail));
+        var order = getTaskOrder();
+        order.push(id);
+        saveTaskOrder(order);
       });
 
       document.addEventListener('my:delete', (event)=>{
         var id = event.detail.wrapperId;
         deleteFromLocalStorage(id);
+        var order = getTaskOrder().filter(function(item){ return item !== id; });
+        saveTaskOrder(order);
       });
 
       document.addEventListener('my:check', (event)=>{
@@ -173,12 +178,11 @@
       }
 
       function fillTasksFromLocalStorage(){
-        var keys = getAllKeysFromLocalStorage();
-        var taskKeys = keys.filter(function(key){ return key.startsWith("task-wrapper-"); });
+        var order = getTaskOrder();
 
-        taskKeys.forEach(function(key){
-          var taskData = JSON.parse(getFromLocalStorage(key));
-          var wrapperId = taskData.wrapperId;
+        order.forEach(function(wrapperId){
+          var taskData = JSON.parse(getFromLocalStorage(wrapperId));
+          if(!taskData) return;
           var idNumber = parseInt(wrapperId.split("-").pop());
           if(idNumber > taskId){
             taskId = idNumber;
