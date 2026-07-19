@@ -1,25 +1,12 @@
-window.addEventListener("load", () => {
-  console.log("Hello, World!")
-  var tasksInput = document.getElementById("add-task-field");
-  tasksInput.focus()
-})
+window.addEventListener("load", init);
 
-var actions = {
-  add: {
-    name: "add",
-    fn: "handleAddButtonClick",
-  },
-  check: {
-    name: "check",
-    fn: "handleCheckboxSelect",
-  },
-  delete: {
-    name: "delete",
-    fn: "handleDeleteClick",
-  },
-};
+function init(){
+    fillTasksFromLocalStorage();
+    var taskInput = document.getElementById('add-task-field');
+    taskInput.focus();
+}
 
-document.addEventListener('my:add', (event) => {
+document.addEventListener("my:add", (event) => {
   var id = event.detail.wrapperId;
   addToLocalStorage(id, JSON.stringify(event.detail));
   var order = getTaskOrder();
@@ -27,25 +14,23 @@ document.addEventListener('my:add', (event) => {
   saveTaskOrder(order);
 });
 
-document.addEventListener('my:delete', (event) => {
+document.addEventListener("my:delete", (event) => {
   var id = event.detail.wrapperId;
   deleteFromLocalStorage(id);
-  var order = getTaskOrder().filter(function (item) { return item !== id; });
+  var order = getTaskOrder().filter(function (item) {
+    return item !== id;
+  });
   saveTaskOrder(order);
 });
 
-document.addEventListener('my:check', (event) => {
+document.addEventListener("my:check", (event) => {
   var id = event.detail.wrapperId;
   updateInLocalStorage(id, JSON.stringify(event.detail));
 });
 
-window.addEventListener('load', fillTasksFromLocalStorage);
-
 
 var headerTimeEl = document.querySelector(".header-time");
-var remainingTimeHoursElement = document.querySelector(
-  ".header-time .hours",
-);
+var remainingTimeHoursElement = document.querySelector(".header-time .hours");
 var remainingTimeMinutesElement = document.querySelector(
   ".header-time .minutes",
 );
@@ -139,7 +124,9 @@ function handleAddButtonClick() {
   ]);
   appendToParent(tasksDiv, [taskWrapperElement]);
 
-  var event = new CustomEvent('my:add', { detail: { wrapperId: currentTaskWrapperId, value: value } });
+  var event = new CustomEvent("my:add", {
+    detail: { wrapperId: currentTaskWrapperId, value: value },
+  });
   document.dispatchEvent(event);
 }
 
@@ -158,7 +145,9 @@ function handleCheckboxSelect(taskWrapperId) {
     checked = false;
   }
 
-  var event = new CustomEvent('my:check', { detail: { wrapperId: taskWrapperId, value: labelValue, checked: checked } });
+  var event = new CustomEvent("my:check", {
+    detail: { wrapperId: taskWrapperId, value: labelValue, checked: checked },
+  });
   document.dispatchEvent(event);
 }
 
@@ -166,7 +155,9 @@ function handleDeleteClick(taskWrapperId) {
   let taskToDelete = document.getElementById(taskWrapperId);
   taskToDelete.remove();
 
-  var event = new CustomEvent('my:delete', { detail: { wrapperId: taskWrapperId } });
+  var event = new CustomEvent("my:delete", {
+    detail: { wrapperId: taskWrapperId },
+  });
   document.dispatchEvent(event);
 }
 
@@ -265,5 +256,3 @@ function createElement(tagName, options) {
 
   return element;
 }
-
-
