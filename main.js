@@ -29,9 +29,7 @@
         updateInLocalStorage(id, JSON.stringify(event.detail));
       });
 
-      window.onload(()=>{
-        fillTasksFromLocalStorage();
-      })
+      window.addEventListener('load', fillTasksFromLocalStorage);
 
 
       var headerTimeEl = document.querySelector(".header-time");
@@ -171,6 +169,64 @@
       function registerCheckboxListener(checkboxInputElement, taskWrapperId) {
         checkboxInputElement.addEventListener("click", (event) => {
           handleCheckboxSelect(taskWrapperId);
+        });
+      }
+
+      function fillTasksFromLocalStorage(){
+        var keys = getAllKeysFromLocalStorage();
+        var taskKeys = keys.filter(function(key){ return key.startsWith("task-wrapper-"); });
+
+        taskKeys.forEach(function(key){
+          var taskData = JSON.parse(getFromLocalStorage(key));
+          var wrapperId = taskData.wrapperId;
+          var idNumber = parseInt(wrapperId.split("-").pop());
+          if(idNumber > taskId){
+            taskId = idNumber;
+          }
+
+          var checkboxId = "task-checkbox-" + idNumber;
+          var labelId = "task-label-" + idNumber;
+          var buttonId = "task-button-" + idNumber;
+
+          var taskWrapperElement = createElement("div", { id: wrapperId });
+          taskWrapperElement.classList.add("task-wrapper");
+
+          var taskLabelElement = createElement("span", {
+            id: labelId,
+            textContent: taskData.value,
+          });
+          taskLabelElement.classList.add("task-label");
+
+          if(taskData.checked){
+            taskLabelElement.style.textDecorationLine = "line-through";
+          }
+
+          var taskDeleteButton = createElement("button", {
+            id: buttonId,
+            textContent: "Удалить",
+          });
+          for(var cls of ["btn", "delete"]){
+            taskDeleteButton.classList.add(cls);
+          }
+
+          var taskCheckboxElement = createElement("input", {
+            id: checkboxId,
+            type: "checkbox",
+          });
+          taskCheckboxElement.classList.add("task");
+          if(taskData.checked){
+            taskCheckboxElement.checked = true;
+          }
+
+          registerCheckboxListener(taskCheckboxElement, wrapperId);
+          registerTaskDeleteEventListener(taskDeleteButton, wrapperId);
+
+          appendToParent(taskWrapperElement, [
+            taskCheckboxElement,
+            taskLabelElement,
+            taskDeleteButton,
+          ]);
+          appendToParent(tasksDiv, [taskWrapperElement]);
         });
       }
 
